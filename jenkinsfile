@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('CLONE SCM FROM GITHUB') {
+            steps {
+                echo 'CLONE SCM FROM GITHUB'
+				git branch: 'main', url: 'https://github.com/madhuri179/madhurirao.git'
+				
+            }
+        }
+     stage('BUILD ARTIFACT') {
+            steps {
+                echo 'BUILD CODE USINGH MAVEN'
+		        sh 'mvn clean install'
+				
+				
+            }
+        }
+      stage('DEPLY TO TOMCAT') {
+            steps {
+                echo 'DEPLY TO TOMCAT'
+				deploy adapters: [tomcat9(path: '', url: 'http://54.166.237.153:8080/')], contextPath: 'facebook', war: '**/*.war'
+				
+				
+				
+            }
+        }
+
+
+    }
+}
